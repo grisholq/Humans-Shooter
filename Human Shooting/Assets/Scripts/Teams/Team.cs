@@ -17,12 +17,35 @@ public class Team : MonoBehaviour
     [SerializeField] private Color healDiceColor;
     [SerializeField] private int teamId;
 
+    private float teamPoints;
+
+    public float TeamPoints 
+    { 
+        get
+        {
+            return teamPoints;
+        }
+
+        set
+        {
+            teamPoints = Mathf.Max(0, value);
+        }
+    }
+
     public Transform GarbageParent { get => garbageParent; set => garbageParent = value; }
     public int HumansCount { get => humansParent.childCount; }
 
     public Color SpawnDiceColor { get => spawnDiceColor; }
     public Color HealDiceColor { get => healDiceColor; }
     public TeamZone TeamZone { get => teamZone; }
+
+    public HumanData[] Humans
+    {
+        get
+        {
+            return humansParent.GetComponentsInChildren<HumanData>();
+        }
+    }
 
     private void Awake()
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(BoxCollider))]
 public class CentreZone : Zone
 {
 

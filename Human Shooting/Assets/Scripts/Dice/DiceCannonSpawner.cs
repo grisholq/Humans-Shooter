@@ -28,25 +28,22 @@ public class DiceCannonSpawner : MonoBehaviour
     {
         Dice dice = factory.GetDice();
         dice.transform.position = dicePoint.position;
-        ;
-        dice.Rigidbody.isKinematic = true;
-        
+        dice.Rigidbody.isKinematic = true;       
         dice.Active = false;
         data.Dice = dice;
 
-        int chance = Random.Range(0, 1);
+        int chance = Random.Range(0,10);
 
-        switch(chance)
+        if (chance <= 7)
         {
-            case 0:
-                dice.DiceRolled += data.Team.SpawnHumans;
-                dice.MeshRenderer.material.color = data.Team.SpawnDiceColor;
-                break;
-
-            case 1:
-                dice.DiceRolled += data.Team.SpawnHeal;
-                dice.MeshRenderer.material.color = data.Team.HealDiceColor;
-                break;
+            dice.DiceRolled += data.Team.SpawnHumans;
+            dice.MeshRenderer.material.color = data.Team.SpawnDiceColor;
+            
         }
+        else
+        {
+            dice.DiceRolled += data.Team.SpawnHeal;
+            dice.MeshRenderer.material.color = data.Team.HealDiceColor;
+        }                          
     }
 }

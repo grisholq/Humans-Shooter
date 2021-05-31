@@ -37,6 +37,7 @@ public class HumanMover : MonoBehaviour
             movePoint = data.TeamZone.GetPointInsideZone();
             movePoint = GetNearestPointOnNavMesh(movePoint);
             hasTeamZoneMovePoint = true;
+            hasCentreZoneMovePoint = false;
         }
         
         if (data.TeamWinning && !hasCentreZoneMovePoint)
@@ -44,6 +45,7 @@ public class HumanMover : MonoBehaviour
             movePoint = data.CentreZone.GetPointInsideZone();
             movePoint = GetNearestPointOnNavMesh(movePoint);
             hasCentreZoneMovePoint = true;
+            hasTeamZoneMovePoint = false;
         }
 
         MoveToPoint(movePoint);
@@ -52,18 +54,12 @@ public class HumanMover : MonoBehaviour
     private void MoveToPoint(Vector3 point)
     {
         navMeshAgent.SetDestination(point);
-
-        if (transform.position == point)
-        {
-            hasTeamZoneMovePoint = false;
-            hasCentreZoneMovePoint = false;
-        }
     }
 
     private Vector3 GetNearestPointOnNavMesh(Vector3 position)
     {
         NavMeshHit hit;
-        NavMesh.SamplePosition(position, out hit, 2, NavMesh.AllAreas);
+        NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas);
         return hit.position;
     }
 }
