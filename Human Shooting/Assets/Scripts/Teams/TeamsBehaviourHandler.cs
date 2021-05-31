@@ -13,8 +13,16 @@ public class TeamsBehaviourHandler : MonoBehaviour
 
     private void Update()
     {
-        ActLikeLooser(data.GetLoosingTeam());       
-        ActLikeWinner(data.GetWinningTeam());
+        if(data.HasWinningTeam)
+        {
+            ActLikeLooser(data.GetLoosingTeam());
+            ActLikeWinner(data.GetWinningTeam());
+        }
+        else
+        {
+            ActLikeLooser(data.PlayerTeam);
+            ActLikeLooser(data.BotTeam);
+        }       
     }
 
     private void ActLikeWinner(Team team)

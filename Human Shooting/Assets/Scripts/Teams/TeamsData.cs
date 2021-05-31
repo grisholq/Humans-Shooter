@@ -8,6 +8,14 @@ public class TeamsData : MonoBehaviour
     public Team PlayerTeam { get => playerTeam; }
     public Team BotTeam { get => botTeam;}
 
+    public bool HasWinningTeam
+    {
+        get
+        {
+            return playerTeam.HumansCount != botTeam.HumansCount;
+        }
+    }
+
     public Team GetWinningTeam()
     {
         if(playerTeam.HumansCount > botTeam.HumansCount)

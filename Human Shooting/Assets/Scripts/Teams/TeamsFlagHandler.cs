@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(TeamsData), typeof(TeamsPointsCounter))]
 public class TeamsFlagHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Flag flag;
+
+    private TeamsData data;
+    private TeamsPointsCounter counter;
+
+    private void Awake()
     {
-        
+        data = GetComponent<TeamsData>();
+        counter = GetComponent<TeamsPointsCounter>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        Team team = data.GetWinningTeam();
+        float height = (team.TeamPoints / counter.PointsToWin) * flag.MaxHeight + flag.MinHeight;
+
+        flag.SetFlagColor(team.TeamFlagColor);
+        flag.SetHeight(height);     
     }
 }

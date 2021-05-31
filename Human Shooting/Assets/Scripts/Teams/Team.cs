@@ -13,6 +13,7 @@ public class Team : MonoBehaviour
     [SerializeField] private TeamZone teamZone;
     [SerializeField] private CentreZone centreZone;
 
+    [SerializeField] private Color teamFlagColor;
     [SerializeField] private Color spawnDiceColor;
     [SerializeField] private Color healDiceColor;
     [SerializeField] private int teamId;
@@ -37,6 +38,8 @@ public class Team : MonoBehaviour
 
     public Color SpawnDiceColor { get => spawnDiceColor; }
     public Color HealDiceColor { get => healDiceColor; }
+    public Color TeamFlagColor { get => teamFlagColor; }
+
     public TeamZone TeamZone { get => teamZone; }
 
     public HumanData[] Humans
@@ -47,9 +50,15 @@ public class Team : MonoBehaviour
         }
     }
 
+
     private void Awake()
     {
         cannonData.Team = this;
+    }
+
+    public void Disable()
+    {
+
     }
 
     public void SpawnHumans(Vector3 position, int count)
