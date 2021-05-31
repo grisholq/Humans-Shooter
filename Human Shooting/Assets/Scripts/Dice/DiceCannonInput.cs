@@ -11,12 +11,17 @@ public class DiceCannonInput : MonoBehaviour
 
     private void Update()
     {
+        ProcessInput();
+    }
+
+    public virtual void ProcessInput()
+    {
         Vector3 point = CastRayOnGround();
-        MouseMoved?.Invoke(point);
+        MoveMouse(point);
 
         if (Input.GetMouseButtonDown(0))
         {
-            MouseButtonDown?.Invoke(point); 
+            PressMouseButton(point);
         }
     }
 
@@ -26,5 +31,17 @@ public class DiceCannonInput : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(ray, out hit, 100, groundLayer, QueryTriggerInteraction.Ignore);
         return hit.point;                
+    }
+
+    protected void PressMouseButton(Vector3 position)
+    {
+        if (MouseButtonDown == null) return;
+        MouseButtonDown.Invoke(position);
+    }
+
+    protected void MoveMouse(Vector3 position)
+    {
+        if (MouseMoved == null) return;
+        MouseMoved.Invoke(position);
     }
 }

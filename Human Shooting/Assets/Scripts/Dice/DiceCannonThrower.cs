@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(DiceCannonInput), typeof(DiceData), typeof(DiceCannonSpawnTimer))]
+[RequireComponent(typeof(DiceCannonInput), typeof(DiceCannonData), typeof(DiceCannonSpawnTimer))]
 public class DiceCannonThrower : MonoBehaviour
 {
     [SerializeField] private Transform parent;
@@ -11,13 +11,13 @@ public class DiceCannonThrower : MonoBehaviour
     [SerializeField] private float additionalY;
 
     private DiceCannonInput input;
-    private DiceData data;
+    private DiceCannonData data;
     private DiceCannonSpawnTimer timer;
 
     private void Awake()
     {
         input = GetComponent<DiceCannonInput>();
-        data = GetComponent<DiceData>();
+        data = GetComponent<DiceCannonData>();
         timer = GetComponent<DiceCannonSpawnTimer>();
 
         input.MouseButtonDown += ThrowDice;
@@ -25,6 +25,8 @@ public class DiceCannonThrower : MonoBehaviour
 
     private void ThrowDice(Vector3 position)
     {
+        if (data.Dice == null) return;
+
         timer.Restart();
         Dice dice = data.Dice;
         data.Dice = null;

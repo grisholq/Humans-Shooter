@@ -16,23 +16,29 @@ public class HumanHitbox : MonoBehaviour, IHitbox
 
     private void OnTriggerEnter(Collider other)
     {
-        ApplyDamage(other.GetComponent<IDamager>());
+        if (ApplyDamage(other.GetComponent<IDamager>())) Destroy(other.gameObject);
         ApplyHeal(other.GetComponent<IHealer>());
     }
  
-    private void ApplyDamage(IDamager damager)
+    private bool ApplyDamage(IDamager damager)
     {
         if(damager != null && damager.TeamId != data.TeamId)
         {
             health.Damage(damager.Damage);
+            return true;
         }
+
+        return false;
     }
 
-    private void ApplyHeal(IHealer healer)
+    private bool ApplyHeal(IHealer healer)
     {
-        if (healer != null && healer.TeamId != data.TeamId)
+        if (healer != null && healer.TeamId == data.TeamId)
         {
-            health.Damage(healer.Heal);
+            health.Heal(healer.Heal);
+            return true;
         }
+
+        return false;
     }
 }

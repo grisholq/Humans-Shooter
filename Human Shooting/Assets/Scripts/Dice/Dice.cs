@@ -6,6 +6,7 @@ public class Dice : MonoBehaviour
     [SerializeField] private float stopVelocity;
 
     public Rigidbody Rigidbody { get; set; }
+    public MeshRenderer MeshRenderer { get; set; }
 
     public event Action<Vector3, int> DiceRolled;
 
@@ -14,6 +15,7 @@ public class Dice : MonoBehaviour
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody>();
+        MeshRenderer = GetComponent<MeshRenderer>();
         Active = false;
     }
 

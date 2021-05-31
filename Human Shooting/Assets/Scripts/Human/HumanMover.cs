@@ -1,19 +1,17 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
 [RequireComponent(typeof(HumanData))]
 public class HumanMover : MonoBehaviour 
 {
-    [SerializeField] private float randomMovementRange;
-    [SerializeField] private float stopDistance;
-
     private NavMeshAgent navMeshAgent;
 
     private HumanData data;
 
-    private Vector3 partolPoint;
-    private bool hasPatrolPoint;
+    private Vector3 movePoint;
+
+    private bool hasTeamZoneMovePoint;
+    private bool hasCentreZoneMovePoint;
 
     public float Speed
     {
@@ -28,58 +26,38 @@ public class HumanMover : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         data = GetComponent<HumanData>();
 
-        hasPatrolPoint = false;
+        hasTeamZoneMovePoint = false;
+        hasCentreZoneMovePoint = false;
     }
 
     private void Update()
     {
+        if (!data.TeamWinning && !hasTeamZoneMovePoint)
+        {           
+            movePoint = data.TeamZone.GetPointInsideZone();
+            movePoint = GetNearestPointOnNavMesh(movePoint);
+            hasTeamZoneMovePoint = true;
+        }
+        
+        if (data.TeamWinning && !hasCentreZoneMovePoint)
+        {
+            movePoint = data.CentreZone.GetPointInsideZone();
+            movePoint = GetNearestPointOnNavMesh(movePoint);
+            hasCentreZoneMovePoint = true;
+        }
 
-        if (data.Target == null)
-        {
-            Patrol();
-        }
-        else
-        {
-            
-            ChaseTarget();
-        }
+        MoveToPoint(movePoint);
     }
 
-    private void Patrol()
+    private void MoveToPoint(Vector3 point)
     {
-        if (!hasPatrolPoint)
+        navMeshAgent.SetDestination(point);
+
+        if (transform.position == point)
         {
-            SetPatrolPoint();
-            hasPatrolPoint = true;
+            hasTeamZoneMovePoint = false;
+            hasCentreZoneMovePoint = false;
         }
-
-        if (hasPatrolPoint) navMeshAgent.SetDestination(partolPoint);
-
-        if(navMeshAgent.velocity == Vector3.zero)
-        {
-            hasPatrolPoint = false;
-        }
-    }
-
-    private void ChaseTarget()
-    {
-        hasPatrolPoint = false;
-        navMeshAgent.SetDestination(GetNearestPointOnNavMesh(data.Target.position));
-
-        float distance = Vector3.Distance(transform.position, data.Target.position);
-
-        if (distance < stopDistance)
-        {
-            navMeshAgent.SetDestination(transform.position);
-        }       
-    }
-
-    private void SetPatrolPoint()
-    {
-        Vector3 pos = Random.insideUnitCircle * randomMovementRange;
-        NavMeshHit hit;
-        NavMesh.SamplePosition(transform.position + new Vector3(pos.x, 0, pos.y), out hit, randomMovementRange, NavMesh.AllAreas);
-        partolPoint = hit.position;
     }
 
     private Vector3 GetNearestPointOnNavMesh(Vector3 position)

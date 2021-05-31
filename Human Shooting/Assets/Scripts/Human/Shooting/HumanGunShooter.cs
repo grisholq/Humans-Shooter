@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(HumanRotator), typeof(HumanData), typeof(HumanShootTimer))]
 public class HumanGunShooter : MonoBehaviour
@@ -7,7 +6,6 @@ public class HumanGunShooter : MonoBehaviour
     [SerializeField] private float shootRange;
     [SerializeField] private Transform bulletStartPosition;
     [SerializeField] private Transform bulletsPrefab;
-    [SerializeField] private Transform bulletsParent;
     [SerializeField] private float bulletLifetime;
     [SerializeField] private float bulletDamage;
     [SerializeField] private float bulletSpeed;
@@ -16,7 +14,6 @@ public class HumanGunShooter : MonoBehaviour
     private HumanRotator rotator;    
     private HumanData data;
 
-    public bool IsShooting { get; set; }
 
     private void Awake()
     {
@@ -28,14 +25,9 @@ public class HumanGunShooter : MonoBehaviour
     private void Update()
     {
         if(data.Target != null && TargetInRange())
-        {
-            IsShooting = true;         
+        {        
             rotator.RotateTowards(data.Target);
             Shoot();
-        }
-        else
-        {
-            IsShooting = false;
         }
     }
 
@@ -45,7 +37,7 @@ public class HumanGunShooter : MonoBehaviour
 
         timer.Restart();
 
-        Bullet bullet = Instantiate(bulletsPrefab, bulletsParent).GetComponent<Bullet>();
+        Bullet bullet = Instantiate(bulletsPrefab, data.GarbageParent).GetComponent<Bullet>();
         bullet.transform.position = bulletStartPosition.position;
         bullet.Direction = (data.Target.position - transform.position).normalized;
         bullet.TeamId = data.TeamId;
